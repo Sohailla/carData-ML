@@ -10,7 +10,7 @@ import numpy as np
 # dataset = pandas.read_csv(url, names=carInfo)
 # print(dataset.head())
 # load the dataset
-dataset = pandas.read_csv('/Users/macintoshhd/Downloads/Sohaila /Final-Second-Term/Machine Learning/ass1/car_data.csv')
+dataset = pandas.read_csv('car_data.csv')
 
 carInfo = ['wheelbase', 'carlength', 'carwidth', 'carheight', 'curbweight',
             'enginesize', 'boreratio', 'stroke', 'compressionratio', 'horsepower',
