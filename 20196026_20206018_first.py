@@ -1,81 +1,89 @@
 import pandas as pandas
-from matplotlib import pyplot as plt
-import numpy as np
+import matplotlib.pyplot as plot
+import numpy as numpy
+from sklearn.model_selection import train_test_split
+from pandas.plotting import scatter_matrix
 
-# # A. Load the “car_data.csv” dataset.
-# url = "/Users/macintoshhd/Downloads/Sohaila /Final-Second-Term/Machine Learning/ass1/car_data.csv"
-# carInfo = ['symboling', 'name', 'fueltypes', 'doornumbers', 'carbody', 'drivewheels', 'enginelocation', 'wheelbase',
-#          'carlength', 'carwidth', 'carheight', 'curbweight', 'enginetype', 'cylindernumber', 'enginesize', 'fuelsystem',
-#          'boreratio', 'stroke', 'compressionratio', 'horsepower', 'peak rpm', 'citympg', 'highwaympg', 'price']
-# dataset = pandas.read_csv(url, names=carInfo)
-# print(dataset.head())
-# load the dataset
-dataset = pandas.read_csv('car_data.csv')
-
+# A. Load the “car_data.csv” dataset.
+url = "car_data.csv"
 carInfo = ['wheelbase', 'carlength', 'carwidth', 'carheight', 'curbweight',
             'enginesize', 'boreratio', 'stroke', 'compressionratio', 'horsepower',
             'peakrpm', 'citympg', 'highwaympg', 'price']
 
+dataset = pandas.read_csv(url)
+# print(dataset.head())
+
 # B. Use scatter plots between different features (7 at least) and the car price to select 5 of the numerical features
 # that are positively/negatively correlated to the car price (i.e., features that have a relationship with the
 # target). These 5 features are the features that will be used in linear regression.
-for car in carInfo:
-    plt.scatter(dataset[car], dataset['price'])
-    plt.xlabel(car)
-    plt.ylabel('Price')
-    plt.show()
+dataset.plot(kind='scatter', x='carlength', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='carwidth', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='carheight', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='curbweight', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='enginesize', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='boreratio', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='stroke', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='peakrpm', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='citympg', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='highwaympg', y='price')
+plot.show()
 
 # select 5 features that are correlated with price
 carInfo = ['carlength', 'carwidth', 'curbweight', 'enginesize', 'horsepower']
 
 # C. Split the dataset into training and testing sets.
-size = int(0.8 * len(dataset))
-data = dataset.sample(size, random_state= 42)
-test = dataset.drop(data.index)
-
-# X = dataset[['enginesize', 'horsepower', 'carwidth', 'curbweight', 'citympg']]
-# Y = dataset['price']
-# X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=2, random_state=42)
+# data = dataset.sample(frac=0.8, random_state=42)  // pandas
+# test = dataset.drop(data.index)
+data, test = train_test_split(dataset, test_size=0.8, random_state=42)
 
 # D. Implement linear regression from scratch using gradient descent to
 # optimize the parameters of the hypothesis function.
 # define the hypothesis function
-def hypothesis(theta, X):
-    return np.dot(X, theta)
+def hypothesis(Theta, X):
+    return numpy.dot(X, Theta)
 
 # define the cost function
-def cost(theta, X, y):
+def cost(Theta, X, y):
     m = len(y)
     h = hypothesis(theta, X)
-    J = np.sum((h-y)**2)/(2*m)
+    J = numpy.sum((h-y)**2)/(2*m)
     return J
 
 # define the gradient descent function
-def gradient_descent(X, y, theta, alpha, iterations):
+def gradient_descent(X, y, Theta, Alpha, num_iterations):
     m = len(y)
-    cost_history = np.zeros(iterations)
+    costCycle = numpy.zeros(num_iterations)
     for i in range(iterations):
-        h = hypothesis(theta, X)
-        theta = theta - (alpha/m)*np.dot(X.T, (h-y))
-        cost_history[i] = cost(theta, X, y)
-    return theta, cost_history
+        h = hypothesis(Theta, X)
+        Theta = Theta - (Alpha / m) * numpy.dot(X.T, (h - y))
+        costCycle[i] = cost(theta, X, y)
+    return Theta, costCycle
 
 # prepare training and testing data
-train_X = np.array(data[carInfo])
-train_y = np.array(data['price'])
-test_X = np.array(test[carInfo])
-test_y = np.array(test['price'])
+train_X = numpy.array(data[carInfo])
+train_y = numpy.array(data['price'])
+test_X = numpy.array(test[carInfo])
+test_y = numpy.array(test['price'])
 
 # normalize training data
-mu = np.mean(train_X, axis=0)
-sigma = np.std(train_X, axis=0)
+mu = numpy.mean(train_X, axis=0)
+sigma = numpy.std(train_X, axis=0)
 train_X = (train_X - mu)/sigma
 
 # add bias term to training data
-train_X = np.insert(train_X, 0, 1, axis=1)
+train_X = numpy.insert(train_X, 0, 1, axis=1)
 
 # initialize theta and hyperparameters
-theta = np.zeros(train_X.shape[1])
+theta = numpy.zeros(train_X.shape[1])
 alpha = 0.01
 iterations = 1500
 
@@ -90,19 +98,19 @@ print(theta)
 # descent.
 
 # G. Plot the cost against the number of iterations.
-plt.plot(cost_history)
-plt.xlabel('Iterations')
-plt.ylabel('Cost')
-plt.show()
+plot.plot(cost_history)
+plot.xlabel('Iterations')
+plot.ylabel('Cost')
+plot.show()
 
 # normalize testing data
 test_X = (test_X - mu)/sigma
 
 # add bias term to testing data
-test_X = np.insert(test_X, 0, 1, axis=1)
+test_X = numpy.insert(test_X, 0, 1, axis=1)
 
 # H. Use the optimized hypothesis function to make predictions on the testing
 # set and calculate the accuracy of the final (trained) model on the test set.
 predictions = hypothesis(theta, test_X)
-accuracy = 1 - np.mean(np.abs(predictions - test_y)/test_y)
+accuracy = 1 - numpy.mean(numpy.abs(predictions - test_y)/test_y)
 print('Accuracy:', accuracy)
