@@ -15,26 +15,26 @@ dataset = pandas.read_csv(url)
 # B. Use scatter plots between different features (7 at least) and the car price to select 5 of the numerical features
 # that are positively/negatively correlated to the car price (i.e., features that have a relationship with the
 # target). These 5 features are the features that will be used in linear regression.
-# dataset.plot(kind='scatter', x='carlength', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='carwidth', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='carheight', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='curbweight', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='enginesize', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='boreratio', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='stroke', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='peakrpm', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='citympg', y='price')
-# plot.show()
-# dataset.plot(kind='scatter', x='highwaympg', y='price')
-# plot.show()
+dataset.plot(kind='scatter', x='carlength', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='carwidth', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='carheight', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='curbweight', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='enginesize', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='boreratio', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='stroke', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='peakrpm', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='citympg', y='price')
+plot.show()
+dataset.plot(kind='scatter', x='highwaympg', y='price')
+plot.show()
 
 # select 5 features that are correlated with price
 features = ['carlength', 'carwidth', 'curbweight', 'enginesize', 'horsepower']
@@ -75,9 +75,9 @@ def gradient_descent(X, Y, theta, alpha, n_iterations):
         h = hypothesis(X, theta)
         calc_errors = h - Y
         gradient = 1/ m * numpy.dot(X.T, calc_errors)
-        theta = theta - alpha * gradient
-        result.append(cost(X, Y, theta))
-    return theta, result
+        Theta = theta - alpha * gradient
+        result.append(cost(X, Y, Theta))
+    return Theta, result
 
 # initialize theta and hypothesis parameters
 alpha = 0.01
@@ -85,11 +85,11 @@ n_iterations = 1000
 theta = numpy.zeros(X_train.shape[1])
 
 # run gradient descent to optimize theta
-theta, result = gradient_descent(X_train, y_train, theta, alpha, n_iterations)
+Theta, result = gradient_descent(X_train, y_train, theta, alpha, n_iterations)
 
 # E. print the optimized parameters
 print('Optimized parameters:')
-print(theta)
+print(Theta)
 
 # G. Plot the cost against the number of iterations.
 plot.plot(result)
@@ -99,6 +99,6 @@ plot.show()
 
 # H. Use the optimized hypothesis function to make predictions on the testing
 # set and calculate the accuracy of the final (trained) model on the test set.
-h = hypothesis(theta, X_test)
+h = hypothesis(X_test ,theta)
 Accuracy = 1 - numpy.mean(numpy.abs(h - y_test)/y_test)
 print('Accuracy:', Accuracy)
